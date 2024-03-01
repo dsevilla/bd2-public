@@ -54,7 +54,7 @@ def csv_to_mongo(file, coll):
         columns = next(reader)
 
         # Las columnas que contienen 'Date' se interpretan como fechas
-        func_to_cols = list(map(lambda c: to_date if 'date' in c.lower() else to_numeric), columns))
+        func_to_cols = list(map(lambda c: to_date if 'date' in c.lower() else to_numeric, columns))
 
         for batch in batched(tqdm(reader, desc='Leyendo e insertando filas...'), 10000):
             docs = []
