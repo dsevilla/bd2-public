@@ -15,7 +15,8 @@ def csv_to_mongo(file, coll):
         if not ((d[0] >= '0' and d[0] <= '9') or d[0] == '-' or d[0] == '+' or d[0]=='.'):
             return str(d)
         try:
-            return int(d) if abs(int(d)) <= sys.maxsize else str(d) # avoid mongo errors with big integers
+            v = int(d)
+            return v if abs(v) <= sys.maxsize else str(d) # avoid mongo errors with big integers
         except ValueError:
             try:
                 return float(d)
