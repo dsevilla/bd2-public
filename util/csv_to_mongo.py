@@ -1,38 +1,34 @@
 import csv
 import sys
 from datetime import datetime
+from pymongo.collection import Collection
+from typing import Any
 from tqdm.notebook import tqdm
 
-def csv_to_mongo(file, coll):
+def csv_to_mongo(file: str, coll: Collection) -> None:
     """
     Carga un fichero CSV en Mongo. file especifica el fichero, coll la colección
     dentro de la base de datos.
     """
     # Convertir todos los elementos que se puedan a números
-    def to_numeric(d):
+    def to_numeric(d: str):
         if len(d) == 0:
             return ''
         if not ((d[0] >= '0' and d[0] <= '9') or d[0] == '-' or d[0] == '+' or d[0]=='.'):
-            return str(d)
+            return d
         try:
             v = int(d)
-            return v if abs(v) <= sys.maxsize else str(d) # avoid mongo errors with big integers
+            return v if abs(v) <= sys.maxsize else d # avoid mongo errors with big integers
         except ValueError:
             try:
                 return float(d)
             except ValueError:
-                return str(d)
+                return d
 
-    def to_date(d):
+    def to_date(d: str) -> datetime | None:
         """To ISO Date. If this cannot be converted, return NULL (None)"""
         try:
             return datetime.strptime(d, "%Y-%m-%dT%H:%M:%S.%f")
-        except ValueError:
-            return None
-
-    def to_str(d):
-        try:
-          return str(d)
         except ValueError:
             return None
 
