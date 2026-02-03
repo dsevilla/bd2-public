@@ -1,0 +1,12 @@
+services:
+
+  notebook:
+    image: "quay.io/jupyter/scipy-notebook:latest"
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work/bd2
+    user: root
+    environment:
+      - JUPYTER_TOKEN=bd2
+      - GRANT_SUDO=yes
